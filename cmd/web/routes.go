@@ -1,14 +1,28 @@
 package main
 
-import "net/http"
+import (
+	"github.com/julienschmidt/httprouter"
+	"github.com/justinas/alice" // New import
+	"net/http"
+)
 
 func (app *application) routes() http.Handler {
-	mux := http.NewServeMux()
+	router := httprouter.New()
+
+	router.NotFound = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		app.notFound(w)
+	})
+
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
-	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
-	mux.HandleFunc("/", app.home)
-	mux.HandleFunc("/snippet/view", app.snippetView)
-	mux.HandleFunc("/snippet/create", app.snippetCreate)
+	router.Handler(http.MethodGet, "/static/*filepath", http.StripPrefix("/static", fileServer))
+
 	// Wrap the existing chain with the recoverPanic middleware.
-	return app.recoverPanic(app.logRequest(secureHeaders(mux)))
+	router.HandlerFunc(http.MethodGet, "/", app.home)
+	router.HandlerFunc(http.MethodGet, "/snippet/view/:id", app.snippetView)
+	router.HandlerFunc(http.MethodGet, "/snippet/create", app.snippetCreate)
+	router.HandlerFunc(http.MethodPost, "/snippet/create", app.snippetCreatePost)
+
+	standart := alice.New(app.recoverPanic, app.logRequest, secureHeaders)
+
+	return standart.Then(router)
 }
