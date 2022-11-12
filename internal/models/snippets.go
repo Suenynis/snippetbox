@@ -81,3 +81,14 @@ WHERE expires > UTC_TIMESTAMP() ORDER BY id DESC LIMIT 10`
 	}
 	return snippets, nil
 }
+
+func (m *SnippetModel) DELETE(id int) error {
+	stmt := `DELETE FROM snippetbox 
+       WHERE id=?;`
+
+	if _, err := m.DB.Exec(stmt, id); err != nil {
+		return err
+	}
+
+	return nil
+}

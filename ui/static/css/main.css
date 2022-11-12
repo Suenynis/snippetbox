@@ -125,16 +125,17 @@ nav div:last-child a {
 nav a.live {
     color: #34495E;
     cursor: default;
+    margin-bottom: 5px;
 }
 
 nav a.live:hover {
     text-decoration: none;
 }
 
-.Moment_log{
+.mom{
     display: flex;
-    justify-content: center;
-
+    align-items: center;
+    margin-bottom: 15px;
 }
 
 nav a.live:after {
@@ -153,7 +154,7 @@ nav a.live:after {
 }
 
 a.button, input[type="submit"] {
-    background-color: #9FE2BF;
+    background-color: #50b5c2;
     border-radius: 3px;
     color: #FFFFFF;
     padding: 18px 27px;
