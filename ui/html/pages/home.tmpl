@@ -14,7 +14,7 @@
 <!-- Use the new template function here -->
 <td>{{humanDate .Created}}</td>
 <td>#{{.ID}}</td>
-<td> <a href='/snippet/delete/{{.ID}}'>Delete</a></td>
+<td id="qaz"><form action="/snippet/delete/{{.ID}}" method="GET"><input type="submit" value="&#10004" id="buttn"></form></td>
 </tr>
 {{end}}
 </table>
